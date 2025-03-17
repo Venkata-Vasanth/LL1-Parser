@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LL(1) Grammar Checker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>LL(1) Grammar Checker</h1>
+            <p>Enter your grammar and check if it is LL(1)!</p>
+            <button id="toggleDarkMode">🌙 Toggle Dark Mode</button>
+        </header>
+
+        <!-- Editable Grammar Input Section -->
+        <section class="input-section">
+            <div class="grammar-box">
+                <h3>Enter Grammar (JSON Format)</h3>
+                <textarea id="grammarInput" rows="6">
+{
+    "S": ["AB"],
+    "A": ["aA", "ε"],
+    "B": ["b"]
+}
+                </textarea>
+            </div>
+
+            <div class="instructions">
+                <h3>Grammar Format</h3>
+                <ul>
+                    <li>✅ Non-terminals are **keys** (e.g., `"S"`, `"A"`, `"B"`).</li>
+                    <li>✅ Each key maps to an **array of productions**.</li>
+                    <li>✅ Use `"ε"` to represent **epsilon (empty string)**.</li>
+                    <li>❌ No spaces inside production rules.</li>
+                </ul>
+            </div>
+        </section>
+
+        <button id="checkGrammar">Check Grammar</button>
+
+        <section class="result-section">
+            <h2>Results</h2>
+            <div id="output">Click the button to check the grammar.</div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
