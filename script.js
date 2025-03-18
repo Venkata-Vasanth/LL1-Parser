@@ -2,68 +2,98 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("checkGrammar").addEventListener("click", () => {
         showLoadingEffect();
         setTimeout(() => {
-            analyzeGrammar();
+            processGrammar();
         }, 1000);
     });
 
     document.getElementById("toggleDarkMode").addEventListener("click", toggleDarkMode);
-    applySavedTheme();
 });
 
 function showLoadingEffect() {
     const outputDiv = document.getElementById("output");
     outputDiv.style.opacity = 0;
-    outputDiv.innerHTML = "🔄 Checking grammar step by step...";
+    outputDiv.innerHTML = "🔄 Processing grammar...";
     setTimeout(() => {
         outputDiv.style.opacity = 1;
     }, 300);
 }
 
-function analyzeGrammar() {
+function processGrammar() {
     const outputDiv = document.getElementById("output");
-    let grammarText = document.getElementById("grammarInput").value;
-    let grammar;
+    let grammarText = document.getElementById("grammarInput").value.trim();
 
-    try {
-        grammar = JSON.parse(grammarText);
-    } catch (error) {
-        outputDiv.innerHTML = "❌ Invalid Grammar Format! Please enter valid JSON.";
+    if (!grammarText) {
+        outputDiv.innerHTML = "❌ Please enter a grammar.";
         return;
     }
 
-    // Step 1: Compute FIRST Sets
-    let firstSets = computeFirstSets(grammar);
-    outputDiv.innerHTML = `<b>Step 1: FIRST Sets</b><br> ${formatSetOutput(firstSets)}<br><br>`;
+    // Convert input grammar into structured format
+    let grammar = parseGrammar(grammarText);
 
-    // Step 2: Compute FOLLOW Sets
-    let followSets = computeFollowSets(grammar, firstSets);
-    outputDiv.innerHTML += `<b>Step 2: FOLLOW Sets</b><br> ${formatSetOutput(followSets)}<br><br>`;
+    // Step 1: Remove Left Recursion
+    let updatedGrammar = removeLeftRecursion(grammar);
+    outputDiv.innerHTML = `<b>Step 1: Grammar after Removing Left Recursion</b><br><pre>${formatGrammar(updatedGrammar)}</pre><br>`;
 
-    // Step 3: Construct LL(1) Parsing Table
-    let parsingTable = constructLL1Table(grammar, firstSets, followSets);
-    outputDiv.innerHTML += `<b>Step 3: LL(1) Parsing Table</b><br> ${formatParsingTable(parsingTable)}<br><br>`;
+    // Step 2: Compute FIRST Sets
+    let firstSets = computeFirstSets(updatedGrammar);
+    outputDiv.innerHTML += `<b>Step 2: FIRST Sets</b><br>${formatSetOutput(firstSets)}<br><br>`;
+
+    // Step 3: Compute FOLLOW Sets
+    let followSets = computeFollowSets(updatedGrammar, firstSets);
+    outputDiv.innerHTML += `<b>Step 3: FOLLOW Sets</b><br>${formatSetOutput(followSets)}<br><br>`;
+
+    // Step 4: Construct LL(1) Parsing Table
+    let parsingTable = constructLL1Table(updatedGrammar, firstSets, followSets);
+    outputDiv.innerHTML += `<b>Step 4: LL(1) Parsing Table</b><br>${formatParsingTable(parsingTable)}<br><br>`;
 
     outputDiv.style.opacity = 1;
 }
 
-// Dark Mode Toggle
-function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
+// Step 1: Parse Input Grammar (BNF to structured format)
+function parseGrammar(input) {
+    let lines = input.split("\n");
+    let grammar = {};
 
-    // Store user preference in local storage
-    const isDarkMode = document.body.classList.contains("dark-mode");
-    localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+    lines.forEach(line => {
+        let [nt, productions] = line.split("->").map(s => s.trim());
+        let rules = productions.split("|").map(rule => rule.trim().split(" "));
+        grammar[nt] = rules;
+    });
+
+    return grammar;
 }
 
-// Apply saved theme on page load
-function applySavedTheme() {
-    const savedMode = localStorage.getItem("darkMode");
-    if (savedMode === "enabled") {
-        document.body.classList.add("dark-mode");
-    }
+// Step 2: Remove Left Recursion
+function removeLeftRecursion(grammar) {
+    let newGrammar = {};
+
+    Object.keys(grammar).forEach(nt => {
+        let alpha = [];
+        let beta = [];
+
+        grammar[nt].forEach(prod => {
+            if (prod[0] === nt) {
+                alpha.push(prod.slice(1));
+            } else {
+                beta.push(prod);
+            }
+        });
+
+        if (alpha.length > 0) {
+            let newNT = `${nt}'`;
+
+            newGrammar[nt] = beta.map(rule => [...rule, newNT]);
+            newGrammar[newNT] = alpha.map(rule => [...rule, newNT]);
+            newGrammar[newNT].push(["ε"]);
+        } else {
+            newGrammar[nt] = grammar[nt];
+        }
+    });
+
+    return newGrammar;
 }
 
-// Step 1: Compute FIRST Sets
+// Step 3: Compute FIRST Sets
 function computeFirstSets(grammar) {
     let first = {};
     for (let nt in grammar) {
@@ -76,6 +106,7 @@ function computeFirstSets(grammar) {
         for (let nt in grammar) {
             for (let production of grammar[nt]) {
                 let beforeSize = first[nt].size;
+
                 if (isTerminal(production[0]) || production[0] === "ε") {
                     first[nt].add(production[0]);
                 } else {
@@ -89,6 +120,7 @@ function computeFirstSets(grammar) {
                         }
                     }
                 }
+
                 if (first[nt].size !== beforeSize) changed = true;
             }
         }
@@ -96,7 +128,7 @@ function computeFirstSets(grammar) {
     return first;
 }
 
-// Step 2: Compute FOLLOW Sets
+// Step 4: Compute FOLLOW Sets
 function computeFollowSets(grammar, firstSets) {
     let follow = {};
     for (let nt in grammar) {
@@ -110,8 +142,10 @@ function computeFollowSets(grammar, firstSets) {
         for (let nt in grammar) {
             for (let production of grammar[nt]) {
                 let trailer = new Set(follow[nt]);
+
                 for (let i = production.length - 1; i >= 0; i--) {
                     let symbol = production[i];
+
                     if (!isTerminal(symbol)) {
                         let beforeSize = follow[symbol].size;
                         follow[symbol] = new Set([...follow[symbol], ...trailer]);
@@ -134,7 +168,7 @@ function computeFollowSets(grammar, firstSets) {
     return follow;
 }
 
-// Step 3: Construct LL(1) Parsing Table (Conflicts shown in the table)
+// Step 5: Construct LL(1) Parsing Table
 function constructLL1Table(grammar, firstSets, followSets) {
     let table = {};
 
@@ -143,7 +177,6 @@ function constructLL1Table(grammar, firstSets, followSets) {
         for (let production of grammar[nt]) {
             let firstSet = new Set();
 
-            // Compute FIRST(α) for the production
             if (isTerminal(production[0]) || production[0] === "ε") {
                 firstSet.add(production[0]);
             } else {
@@ -153,25 +186,15 @@ function constructLL1Table(grammar, firstSets, followSets) {
                 }
             }
 
-            // Populate the table using FIRST set
             for (let terminal of firstSet) {
                 if (terminal !== "ε") {
-                    if (!table[nt][terminal]) {
-                        table[nt][terminal] = production;
-                    } else {
-                        table[nt][terminal] = `⚠ Conflict! (${table[nt][terminal]} / ${production})`;
-                    }
+                    table[nt][terminal] = production.join(" ");
                 }
             }
 
-            // If ε is in FIRST, use FOLLOW set
             if (firstSet.has("ε")) {
                 for (let terminal of followSets[nt]) {
-                    if (!table[nt][terminal]) {
-                        table[nt][terminal] = production;
-                    } else {
-                        table[nt][terminal] = `⚠ Conflict! (${table[nt][terminal]} / ${production})`;
-                    }
+                    table[nt][terminal] = production.join(" ");
                 }
             }
         }
@@ -180,9 +203,15 @@ function constructLL1Table(grammar, firstSets, followSets) {
     return table;
 }
 
-// Helper Functions
+// Utility Functions
 function isTerminal(symbol) {
     return !symbol.match(/^[A-Z]$/);
+}
+
+function formatGrammar(grammar) {
+    return Object.entries(grammar)
+        .map(([key, value]) => `${key} -> ${value.map(r => r.join(" ")).join(" | ")}`)
+        .join("<br>");
 }
 
 function formatSetOutput(setObject) {
@@ -192,43 +221,21 @@ function formatSetOutput(setObject) {
 }
 
 function formatParsingTable(table) {
+    let result = `<table border='1'><tr><th>Non-Terminal</th>`;
+
     let terminals = new Set();
-    let nonTerminals = Object.keys(table);
+    for (let nt in table) for (let t in table[nt]) terminals.add(t);
+    terminals = [...terminals];
 
-    // Collect all terminals from the parsing table
+    terminals.forEach(terminal => result += `<th>${terminal}</th>`);
+    result += "</tr>";
+
     for (let nt in table) {
-        for (let terminal in table[nt]) {
-            terminals.add(terminal);
-        }
-    }
-
-    terminals = [...terminals]; // Convert set to array
-
-    // Start building the table
-    let result = `<table border='1'>
-        <tr>
-            <th>Non-Terminal</th>`;
-
-    // Create terminal headers
-    for (let terminal of terminals) {
-        result += `<th>${terminal}</th>`;
-    }
-    result += `</tr>`;
-
-    // Populate rows with productions
-    for (let nt of nonTerminals) {
         result += `<tr><td>${nt}</td>`;
-
-        for (let terminal of terminals) {
-            let production = table[nt][terminal] || ""; // Empty if no production
-            
-            // Highlight conflicts directly in the table
-            let cellClass = production.includes("⚠ Conflict!") ? "conflict-cell" : (production ? "valid-cell" : "");
-
-            result += `<td class="${cellClass}">${production}</td>`;
-        }
-
-        result += `</tr>`;
+        terminals.forEach(terminal => {
+            result += `<td>${table[nt][terminal] || ""}</td>`;
+        });
+        result += "</tr>";
     }
 
     result += "</table>";

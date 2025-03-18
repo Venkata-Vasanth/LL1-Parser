@@ -1,68 +1,43 @@
+/* Root Variables for Theming */
+:root {
+    --primary: #4A90E2; /* Main Blue */
+    --secondary: #E3F2FD; /* Light Blue */
+    --text: #333; /* Dark Gray for text */
+    --bg: #F5F5F5; /* Light Gray Background */
+}
+
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #F5F5F5;
-    color: #333;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
     margin: 0;
     padding: 0;
     text-align: center;
 }
 
+/* Container */
 .container {
-    width: 80%;
+    width: 90%;
+    max-width: 800px;
     margin: auto;
     padding: 20px;
 }
 
 /* Header */
 header {
-    background: #4A90E2;
+    background: var(--primary);
     color: white;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-/* Dark Mode */
-.dark-mode {
-    background: #121212;
-    color: #E0E0E0;
-}
-
-/* Change sections to charcoal gray */
-.dark-mode .input-section,
-.dark-mode .result-section,
-.dark-mode .instructions,
-.dark-mode .grammar-box {
-    background: #333; /* Charcoal gray */
-    border: 1px solid #444; /* Slightly lighter border for contrast */
-}
-
-/* Dark Mode Buttons */
-.dark-mode button {
-    background: #D32F2F; /* Dark red */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    border-radius: 5px;
-    transition: 0.3s;
-}
-
-.dark-mode button:hover {
-    background: #B71C1C;
-}
-
-.dark-mode header {
-    background: #444;
-}
-
-/* Grammar Input Section */
-.input-section {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Sections */
+.input-section, .result-section {
     background: white;
     padding: 20px;
     border-radius: 10px;
@@ -70,18 +45,17 @@ header {
     margin-bottom: 20px;
 }
 
-.grammar-box, .instructions {
-    width: 45%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #F5F5F5;
+.instructions {
+    text-align: left;
+    padding-right: 20px;
 }
 
+
+/* Text Areas */
 textarea {
     width: 90%;
     height: 100px;
-    padding: 8px;
+    padding: 10px;
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -89,12 +63,12 @@ textarea {
     resize: vertical;
 }
 
-/* Button */
+/* Buttons */
 button {
-    background: #238aff;
+    background: var(--primary);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 20px;
     cursor: pointer;
     font-size: 16px;
     margin-top: 10px;
@@ -103,88 +77,67 @@ button {
 }
 
 button:hover {
-    background: #4a98f1;
+    background: #357ABD;
 }
 
-/* Results */
-.result-section {
-    background: #F5F5F5;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-#output {
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-/* Parsing Table */
+/* Table Styles */
 table {
-    margin: 20px auto; /* Centers table horizontally */
-    border-collapse: collapse;
-    width: 50%; /* Adjust width if needed */
-    text-align: center; /* Center text inside table */
-    background-color: white;
-}
-
-th, td {
-    border: 1px solid black;
-    padding: 8px;
-}
-
-#output {
-    text-align: center; /* Centers the text output */
-}
-
-/* LL(1) Table */
-.ll1-table {
+    width: 100%;
     margin: 20px auto;
     border-collapse: collapse;
-    width: 60%;
     text-align: center;
 }
 
-/* Conflict Cells */
+th, td {
+    border: 1px solid var(--text);
+    padding: 10px;
+}
+
+th {
+    background: var(--secondary);
+}
+
+/* Conflict Highlight */
 .conflict-cell {
-    background-color: #ff4d4d; /* Red for conflict */
+    background-color: #FF6B6B;
     color: white;
     font-weight: bold;
 }
 
-/* Valid Cells */
 .valid-cell {
-    background-color: #4CAF50; /* Green for valid */
+    background-color: #4CAF50;
     color: white;
     font-weight: bold;
 }
 
-/* DARK MODE TABLE */
-.dark-mode table {
-    background-color: #222; /* Dark table background */
-    color: #E0E0E0;
-    border: 1px solid #E0E0E0;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
 
-.dark-mode th {
-    background-color: #444; /* Dark header background */
-    color: white;
-    border: #E0E0E0;
-}
+    header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
 
-.dark-mode td {
-    border: 1px solid #E0E0E0; /* Slightly lighter borders */
-}
+    textarea {
+        height: 80px;
+    }
 
-/* Conflict Cells in Dark Mode */
-.dark-mode .conflict-cell {
-    background-color: #FF6B6B; /* Lighter red for better contrast */
-    color: black;
-}
+    button {
+        width: 100%;
+        padding: 10px;
+    }
 
-/* Valid Cells in Dark Mode */
-.dark-mode .valid-cell {
-    background-color: #66BB6A; /* Softer green */
-    color: black;
+    table {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
 }

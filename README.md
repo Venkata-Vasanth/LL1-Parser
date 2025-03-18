@@ -1,55 +1,24 @@
-# LL(1) Grammar Analyzer
+# LL(1) Parser
 
-## Overview
-This LL(1) Grammar Analyzer checks whether a given grammar is LL(1), computes FIRST and FOLLOW sets, and generates an LL(1) parsing table. Users can input a grammar in JSON format, and the tool will analyze it step by step.
+This project allows users to input a grammar in BNF format, performs left recursion elimination, calculates FIRST & FOLLOW sets, and constructs an LL(1) parsing table.
+
+## Features
+- Input grammar in BNF format
+- Left recursion elimination
+- Compute FIRST & FOLLOW sets
+- Generate LL(1) parsing table
 
 ## How to Use
-1. **Enter the Grammar in JSON Format** - Provide a grammar with non-terminals as keys and their corresponding productions as arrays.
-2. **Click the Check Grammar Button** - The tool will process the input and generate the required analysis.
-3. **View the Results** - The tool displays:
-   - FIRST sets
-   - FOLLOW sets
-   - LL(1) Parsing Table
-   - Whether the grammar is LL(1) or not
+1. Enter grammar in BNF format
+2. Click 'Analyze' to process the grammar
+3. View FIRST, FOLLOW, and LL(1) parsing table results
 
-## Sample Grammar Inputs
-Use the following example JSON grammars to test the tool:
+## Example Grammar
+E -> E + T | T
+T -> T * F | F
+F -> ( E ) | id
 
-### Example 1: Simple LL(1) Grammar
-```json
-{
-  "S": [["a", "A"]],
-  "A": [["b", "A"], ["c"]]
-}
-```
-
-### Example 2: Grammar with ε-productions
-```json
-{
-  "S": [["A", "b"], ["c"]],
-  "A": [["ε"], ["a"]]
-}
-```
-
-### Example 3: Grammar with Potential Conflicts
-```json
-{
-  "S": [["A", "B"], ["a"]],
-  "A": [["a"], ["b"]],
-  "B": [["b"]]
-}
-```
-
-## Output Format
-- The **FIRST and FOLLOW sets** are displayed in a structured format.
-- The **LL(1) Parsing Table** is shown as a table.
-- If conflicts exist, they are highlighted in the table.
-
-## Notes
-- The tool assumes terminals are lowercase and non-terminals are uppercase.
-- The start symbol is the first key in the JSON object.
-- The end-of-input symbol `$` is automatically included in the FOLLOW set of the start symbol.
-
-## Author
-This tool was created to help users understand and analyze LL(1) grammars efficiently.
-
+## Technologies Used
+- HTML
+- CSS (Monochrome Theme)
+- JavaScript

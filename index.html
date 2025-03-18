@@ -3,49 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LL(1) Grammar Checker</title>
+    <title>LL(1) Parser</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>LL(1) Grammar Checker</h1>
-            <p>Enter your grammar and check if it is LL(1)!</p>
-            <button id="toggleDarkMode">🌙 Toggle Dark Mode</button>
+            <h1>LL(1) Parser</h1>
         </header>
 
-        <!-- Editable Grammar Input Section -->
         <section class="input-section">
             <div class="grammar-box">
-                <h3>Enter Grammar (JSON Format)</h3>
-                <textarea id="grammarInput" rows="6">
-{
-    "S": ["AB"],
-    "A": ["aA", "ε"],
-    "B": ["b"]
-}
-                </textarea>
+                <h2>Enter Grammar (BNF Form)</h2>
+                <textarea id="grammarInput" placeholder="E -> E + T | T&#10;T -> T * F | F&#10;F -> ( E ) | id"></textarea>
+                <button id="checkGrammar">Analyze Grammar</button>
             </div>
-
             <div class="instructions">
-                <h3>Grammar Format</h3>
+                <h2>Instructions</h2>
+                <p>Enter your grammar in <b>BNF format</b>. Each rule should be on a new line.</p>
                 <ul>
-                    <li>✅ Non-terminals are **keys** (e.g., `"S"`, `"A"`, `"B"`).</li>
-                    <li>✅ Each key maps to an **array of productions**.</li>
-                    <li>✅ Use `"ε"` to represent **epsilon (empty string)**.</li>
-                    <li>❌ No spaces inside production rules.</li>
+                    <li>Use `->` for production rules</li>
+                    <li>Use `|` for alternatives</li>
+                    <li>Example:
+                        <pre>E -> E + T | T
+T -> T * F | F
+F -> ( E ) | id</pre>
+                    </li>
                 </ul>
             </div>
         </section>
 
-        <button id="checkGrammar">Check Grammar</button>
-
         <section class="result-section">
             <h2>Results</h2>
-            <div id="output">Click the button to check the grammar.</div>
+            <div id="output">⚡ Grammar analysis will appear here...</div>
         </section>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
