@@ -1,28 +1,36 @@
 # LL(1) Parser
 
-This project allows users to input a grammar in BNF format, performs left recursion elimination, calculates FIRST & FOLLOW sets, and constructs an LL(1) parsing table.
+This project allows users to input a grammar in **BNF format**, eliminates left recursion, computes **FIRST & FOLLOW** sets, constructs an **LL(1) parsing table**, and **parses input strings** based on the generated table.
 
 ## Features
-- Input grammar in BNF format
+- Input grammar in **BNF format**
 - Left recursion elimination
-- Compute FIRST & FOLLOW sets
-- Generate LL(1) parsing table
+- Compute **FIRST & FOLLOW** sets
+- Generate **LL(1) parsing table**
+- **Parse input strings** and validate against the LL(1) grammar
 
 ## How to Use
-1. Enter grammar in BNF format
-2. Click 'Analyze' to process the grammar
-3. View FIRST, FOLLOW, and LL(1) parsing table results
+1. Enter grammar in **BNF format**
+2. Click **'Analyze'** to process the grammar
+3. View **FIRST, FOLLOW, and LL(1) parsing table** results
+4. Enter a string to parse and check if it is accepted by the LL(1) grammar
 
 ## Example Grammar
 E -> E + T | T
 T -> T * F | F
 F -> ( E ) | id
 
-## error example
+
+## Example Input String
+id + id * id
+
+**Valid (Accepted by LL(1) grammar)**  
+
+## Error Example (Conflict in Grammar)
 S -> A | a
 A -> a
 
 ## Technologies Used
 - HTML
-- CSS (Monochrome Theme)
+- CSS
 - JavaScript
