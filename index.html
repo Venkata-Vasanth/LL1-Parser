@@ -3,42 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LL(1) Parser</title>
+    <title>Grammar Checker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>LL(1) Parser</h1>
-        </header>
+    <header>
+        <h1>Grammar Checker</h1>
+    </header>
+    <div class="">
+        <h1>LL(1) Grammar Analyzer</h1>
+        <textarea id="grammarInput" placeholder="Enter Grammar (one rule per line)"></textarea>
+        <button id="checkGrammar">Check Grammar</button>
+        <div id="output"></div>
 
-        <section class="input-section">
-            <div class="grammar-box">
-                <h2>Enter Grammar (BNF Form)</h2>
-                <textarea id="grammarInput" placeholder="E -> E + T | T&#10;T -> T * F | F&#10;F -> ( E ) | id"></textarea>
-                <button id="checkGrammar">Analyze Grammar</button>
-            </div>
-            <div class="instructions">
-                <h2>Instructions</h2>
-                <p>Enter your grammar in <b>BNF format</b>. Each rule should be on a new line.</p>
-                <ul>
-                    <li>Use `->` for production rules</li>
-                    <li>Use `|` for alternatives</li>
-                    <li>Example:
-                        <pre>E -> E + T | T
-T -> T * F | F
-F -> ( E ) | id</pre>
-                    </li>
-                </ul>
-            </div>
-        </section>
+        <input type="text" id="stringInput" placeholder="Enter string (e.g., id + id * id)">
+        <button id="parseString">Parse String</button>
+        <div id="stringOutput"></div>
 
-        <section class="result-section">
-            <h2>Results</h2>
-            <div id="output">⚡ Grammar analysis will appear here...</div>
-        </section>
     </div>
     
     <script src="script.js"></script>
+
+    <footer>
+        Made by <b>Venkata Vasanth Sunkara</b>
+    </footer>
+
 </body>
 </html>

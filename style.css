@@ -1,143 +1,168 @@
-/* Root Variables for Theming */
+/* Theme Colors */
 :root {
-    --primary: #4A90E2; /* Main Blue */
-    --secondary: #E3F2FD; /* Light Blue */
-    --text: #333; /* Dark Gray for text */
-    --bg: #F5F5F5; /* Light Gray Background */
+    --primary-color: #41B4E6; /* Bright Blue */
+    --secondary-color: #67DDE0; /* Light Cyan */
+    --background-color: #F4F4F4; /* Soft Gray */
+    --header-footer-color: #2c2c2c; /* Dark Gray */
+    --text-color: #333;
+    --border-radius: 12px;
+    --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* General Styles */
+/* Body */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    text-align: center;
-}
-
-/* Container */
-.container {
-    width: 90%;
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 /* Header */
 header {
-    background: var(--primary);
+    background: var(--header-footer-color);
     color: white;
-    padding: 15px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-/* Sections */
-.input-section, .result-section {
-    background: white;
+    text-align: center;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
-.instructions {
-    text-align: left;
-    padding-right: 20px;
+/* Main Container */
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 25px;
+    background: white;
+    box-shadow: var(--shadow-light);
+    border-radius: var(--border-radius);
+    transition: box-shadow 0.3s ease;
 }
 
+.container:hover {
+    box-shadow: var(--shadow-hover);
+}
 
-/* Text Areas */
+/* Input Section */
+.input-section {
+    margin: 20px 0;  /* Adds space above and below */
+    padding: 20px;
+    background: #fcfcfc;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+}
+
+/* Input Field */
+input[type="text"] {
+    width: 95%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Textarea */
 textarea {
-    width: 90%;
-    height: 100px;
-    padding: 10px;
+    width: 95%;
+    height: 180px; /* Increased height for better usability */
     font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #fff;
-    resize: vertical;
+    padding: 14px;
+    border: 2px solid #ccc;
+    border-radius: var(--border-radius);
+    resize: none;
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    background: white;
 }
 
-/* Buttons */
+textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(65, 180, 230, 0.3);
+}
+
+
+/* Button */
 button {
-    background: var(--primary);
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
     color: white;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border: none;
-    padding: 12px 20px;
+    border-radius: var(--border-radius);
     cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    border-radius: 5px;
-    transition: 0.3s;
+    transition: background 0.3s, box-shadow 0.3s ease, transform 0.2s;
+    box-shadow: var(--shadow-light);
 }
 
 button:hover {
-    background: #357ABD;
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
 }
 
-/* Table Styles */
+/* Output Box */
+#output {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    background: #e9ecef;
+    font-size: 16px;
+    box-shadow: var(--shadow-light);
+}
+
+/* Preformatted Text */
+pre {
+    background: #f8f9fa;
+    padding: 12px;
+    border-left: 5px solid var(--primary-color);
+    overflow-x: auto;
+    border-radius: var(--border-radius);
+}
+
+/* Table */
 table {
     width: 100%;
-    margin: 20px auto;
     border-collapse: collapse;
-    text-align: center;
+    margin-top: 15px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }
 
 th, td {
-    border: 1px solid var(--text);
-    padding: 10px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
 }
 
 th {
-    background: var(--secondary);
-}
-
-/* Conflict Highlight */
-.conflict-cell {
-    background-color: #FF6B6B;
+    background: var(--primary-color);
     color: white;
-    font-weight: bold;
+    font-size: 16px;
 }
 
-.valid-cell {
-    background-color: #4CAF50;
+td {
+    background: white;
+}
+
+/* Footer */
+footer {
+    background: var(--header-footer-color);
     color: white;
-    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 10px;
-    }
-
-    header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    textarea {
-        height: 80px;
-    }
-
-    button {
-        width: 100%;
-        padding: 10px;
-    }
-
-    table {
-        width: 100%;
-        font-size: 14px;
-    }
-
-    th, td {
-        padding: 6px;
-    }
+footer b {
+    color: var(--secondary-color);
 }

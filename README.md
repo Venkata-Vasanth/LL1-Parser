@@ -18,6 +18,10 @@ E -> E + T | T
 T -> T * F | F
 F -> ( E ) | id
 
+## error example
+S -> A | a
+A -> a
+
 ## Technologies Used
 - HTML
 - CSS (Monochrome Theme)
